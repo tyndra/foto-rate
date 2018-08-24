@@ -29,11 +29,23 @@ export class FotoService {
     }
 
     createURL(fi: FotoInfo) : string {
-      return  backend_url + "foto/" + encodeURIComponent(workFolder + fi.name);
+      let fullpath = workFolder;
+      if (fi.rating > 0 && fi.rating <= 5){
+        fullpath += "/" + fi.rating;
+      }
+      fullpath += "/" + fi.name;
+
+      return  backend_url + "foto/" + encodeURIComponent(fullpath);
     }
 
     rate(fi: FotoInfo, rating: number) : Observable<any> {
-      let url = this.createURL(fi);
-      return this.http.put(url, { rating: rating });
+      let url = backend_url + "foto/" + encodeURIComponent(workFolder);
+
+      let body = {
+        name: fi.name,
+        oldRating: fi.rating,
+        newRating : rating
+      };
+      return this.http.put(url, body);
     }
 }

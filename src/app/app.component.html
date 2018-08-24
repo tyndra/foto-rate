@@ -1,5 +1,5 @@
 <div class="app-container" [class.app-is-mobile]="mobileQuery.matches">
-  <mat-toolbar color="primary" class="app-toolbar">
+  <!-- <mat-toolbar color="primary" class="app-toolbar">
     <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
     <h1 class="app-app-name">{{ title }}</h1>
     <span class="app-spacer"></span>
@@ -13,8 +13,9 @@
     <button mat-icon-button (click)="forward()" class="app-icon-button"><mat-icon>arrow_forward</mat-icon></button>    
     <span class="app-button-spacer"></span>
     <button mat-icon-button (click)="delete()" class="app-icon-button"><mat-icon>delete</mat-icon></button>    
-  </mat-toolbar>
+  </mat-toolbar> -->
 
+  
   <mat-sidenav-container class="app-sidenav-container"
                          [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
     <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
@@ -25,9 +26,30 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <div class="imgbox">
-          <img class="center-fit" src="{{getCurrentFotoURL()}}">
+        <button mat-fab color="primary" (click)="snav.toggle()" class="app-settings-button">
+            <mat-icon>menu</mat-icon>
+        </button>
+        
+        <span *ngIf="getCurrentFotoInfo(); let fi" > 
+          <div class="app-rate-buttons">
+              <button mat-icon-button (click)="rate(1)" [ngClass]="{'app-icon-rated-button': fi.rating >= 1 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
+              <button mat-icon-button (click)="rate(2)" [ngClass]="{'app-icon-rated-button': fi.rating >= 2 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
+              <button mat-icon-button (click)="rate(3)" [ngClass]="{'app-icon-rated-button': fi.rating >= 3 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
+              <button mat-icon-button (click)="rate(4)" [ngClass]="{'app-icon-rated-button': fi.rating >= 4 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
+              <button mat-icon-button (click)="rate(5)" [ngClass]="{'app-icon-rated-button': fi.rating >= 5 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
           </div>
+
+          <div class="app-nav-buttons">
+              <button mat-icon-button color="primary" (click)="back()" class="app-icon-button"><mat-icon>arrow_back</mat-icon></button>    
+              <button mat-icon-button color="primary" (click)="forward()" class="app-icon-button"><mat-icon>arrow_forward</mat-icon></button>    
+              <span class="app-button-spacer"></span>
+              <button mat-icon-button color="primary" (click)="delete()" class="app-icon-button"><mat-icon>delete</mat-icon></button>      
+          </div>
+
+        <div class="imgbox">
+            <img class="center-fit" src="{{getCurrentFotoURL()}}">
+        </div>
+    </span>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

@@ -40,10 +40,25 @@
 .app-icon-button {
   padding: 0 3px;
   min-width: 0;
-  width: 24px;
+  /* width: 24px; */
   line-height: 20px;
   border-radius: 50%;
 }
+
+.app-icon-rate-button {
+  padding: 0 3px;
+  min-width: 0;
+  line-height: 20px;
+  border-radius: 50%;
+  
+  color: lightslategray;  
+  background-color: transparent;
+}
+
+.app-icon-rated-button {
+  color: gold;  
+}
+
 .app-icon-arrow {
   padding: 0 3px;
 }
@@ -71,3 +86,21 @@
   max-height: 100vh;
   margin: auto;
  }
+
+.app-settings-button{
+	position: absolute;
+  right: 30px;
+  top: 15px;
+}
+
+.app-rate-buttons{
+	position: absolute;
+  right: 30px;
+  bottom: 15px;
+}
+
+.app-nav-buttons{
+	position: absolute;
+  left: 30px;
+  bottom: 15px;
+}

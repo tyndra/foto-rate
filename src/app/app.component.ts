@@ -39,7 +39,11 @@ export class AppComponent implements OnInit, OnDestroy {
   private startWork(rating: number) {
     this.currentIndex = -1;
     this.fotoService.getAll(rating).subscribe((data: FotoInfo[]) => {
-      this.allFotoInfos = data;
+      this.allFotoInfos = data.sort(function(a, b){ 
+          var textA = a.name.toUpperCase();
+          var textB = b.name.toUpperCase();
+          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+       });
       if (this.allFotoInfos != null && this.allFotoInfos.length > 0) {
         this.currentIndex = 0;
         for (let fi of this.allFotoInfos) {
@@ -63,10 +67,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private rate(rating: number) {
     let fi = this.getCurrentFotoInfo();
-    this.fotoService.rate(fi, rating).subscribe((data: FotoInfo) => {
-      fi.name = data.name;
+    this.fotoService.rate(fi, rating).subscribe((newFi: FotoInfo) => {
+      fi.name = newFi.name;
+      fi.rating = newFi.rating;
       fi.url = this.fotoService.createURL(fi);
-      this.forward();
+      if (this.canGoForward())
+        this.forward();
+      else
+        this.currentIndex = -1;
     });
   }  
 
