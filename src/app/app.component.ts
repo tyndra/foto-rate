@@ -1,5 +1,5 @@
 import {MediaMatcher} from '@angular/cdk/layout';
-import {ChangeDetectorRef, Component, OnInit, OnDestroy} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import {FotoService} from "./services/foto.service";
 import {FotoInfo} from "./impl/foto.info";
 
@@ -9,12 +9,10 @@ import {FotoInfo} from "./impl/foto.info";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'foto-rate';
-
   mobileQuery: MediaQueryList;
 
-  fillerNav = Array.from({length: 50}, (_, i) => `Nav Item ${i + 1}`);
-
+  opened: boolean;
+  filterRating: number = -1;
   allFotoInfos: FotoInfo[];
   currentIndex: number = -1;
 
@@ -29,11 +27,21 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.startWork(-1);
+    if (this.fotoService.getWorkFolder()){
+      this.startWork(-1);
+    } else {
+      this.opened = true;
+    }
   }
 
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
+  }
+
+  private displayFotos(folder: string) {
+    this.fotoService.setWorkFolder(folder)
+    this.startWork(this.filterRating);
+    this.opened = false;
   }
 
   private startWork(rating: number) {
@@ -63,6 +71,10 @@ export class AppComponent implements OnInit, OnDestroy {
     let fi = this.getCurrentFotoInfo();
 
     return fi != null ? fi.url : null;
+  }
+
+  private setFilter(filter: number){
+    this.filterRating = filter;
   }
 
   private rate(rating: number) {

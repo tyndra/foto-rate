@@ -6,18 +6,26 @@ import { Observable } from '../../../node_modules/rxjs';
 import {FotoInfo} from "../impl/foto.info";
 
 const backend_url = "http://localhost:4200/api/";
-const workFolder = 'C:/temp/glacier/';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FotoService {
-  constructor(private http: HttpClient) { 
+    workFolder: string;
 
-  }
+    constructor(private http: HttpClient) { 
+    }
+
+    setWorkFolder(wf: string){
+      this.workFolder = wf;
+    }
+
+    getWorkFolder(): string {
+      return this.workFolder;
+    }
 
     getAll(rating: number) : Observable<any>  { 
-      let url = backend_url + "fotos/" + encodeURIComponent(workFolder);
+      let url = backend_url + "fotos/" + encodeURIComponent(this.workFolder);
       if (rating > 0 && rating <= 5)
         url += "/"  + rating;
 
@@ -29,7 +37,7 @@ export class FotoService {
     }
 
     createURL(fi: FotoInfo) : string {
-      let fullpath = workFolder;
+      let fullpath = this.workFolder;
       if (fi.rating > 0 && fi.rating <= 5){
         fullpath += "/" + fi.rating;
       }
@@ -39,7 +47,7 @@ export class FotoService {
     }
 
     rate(fi: FotoInfo, rating: number) : Observable<any> {
-      let url = backend_url + "foto/" + encodeURIComponent(workFolder);
+      let url = backend_url + "foto/" + encodeURIComponent(this.workFolder);
 
       let body = {
         name: fi.name,
