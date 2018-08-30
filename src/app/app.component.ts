@@ -1,5 +1,7 @@
 import {MediaMatcher} from '@angular/cdk/layout';
 import {ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
+import {timer} from 'rxjs';
+
 import {FotoService} from "./services/foto.service";
 import {FotoInfo} from "./impl/foto.info";
 
@@ -8,11 +10,14 @@ import {FotoInfo} from "./impl/foto.info";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy  {
+  
   mobileQuery: MediaQueryList;
 
   opened: boolean;
+  isRating: boolean = true;
   filterRating: number = -1;
+  filterCat: string = "";
   allFotoInfos: FotoInfo[];
   currentIndex: number = -1;
 
@@ -30,6 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.fotoService.getWorkFolder()){
       this.startWork(-1);
     } else {
+      this.displayFotos("c:\\temp\\test");
       this.opened = true;
     }
   }
@@ -37,6 +43,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
+  
 
   private displayFotos(folder: string) {
     this.fotoService.setWorkFolder(folder)
@@ -53,11 +60,12 @@ export class AppComponent implements OnInit, OnDestroy {
           return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
        });
       if (this.allFotoInfos != null && this.allFotoInfos.length > 0) {
-        this.currentIndex = 0;
         for (let fi of this.allFotoInfos) {
           fi.url = this.fotoService.createURL(fi);
         }
+        this.setCurrentIndex(0);
       }
+    
     });
   }
 
@@ -73,8 +81,12 @@ export class AppComponent implements OnInit, OnDestroy {
     return fi != null ? fi.url : null;
   }
 
-  private setFilter(filter: number){
+  private setRateFilter(filter: number){
     this.filterRating = filter;
+  }
+
+  private setCatFilter(filter: string){
+    this.filterCat = filter;
   }
 
   private rate(rating: number) {
@@ -100,13 +112,21 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private back(){
     if (this.canGoBack()){
-      this.currentIndex--;
+      this.setCurrentIndex(this.currentIndex - 1);
     }
   }
 
   private forward(){
     if (this.canGoForward()){
-      this.currentIndex++;
+      this.setCurrentIndex(this.currentIndex + 1);
     }
+  }
+
+  private setCurrentIndex(value: number){
+    this.currentIndex = -1;
+    var subsrciption = timer(1).subscribe(t=> {
+      this.currentIndex = value
+      subsrciption.unsubscribe();
+    });
   }
 }

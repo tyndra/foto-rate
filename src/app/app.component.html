@@ -5,19 +5,46 @@
     <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches" fixedTopGap="56"
                        [(opened)]="opened" (opened)="events.push('open!')" (closed)="events.push('close!')">
       
-      <mat-form-field class="app-folder-field">
-        <input matInput #folderPath placeholder="Folder" value="">
-      </mat-form-field>
-      <div>
-        <button mat-icon-button (click)="setFilter(1)" [ngClass]="{'app-icon-rated-button': filterRating >= 1 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
-        <button mat-icon-button (click)="setFilter(2)" [ngClass]="{'app-icon-rated-button': filterRating >= 2 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
-        <button mat-icon-button (click)="setFilter(3)" [ngClass]="{'app-icon-rated-button': filterRating >= 3 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
-        <button mat-icon-button (click)="setFilter(4)" [ngClass]="{'app-icon-rated-button': filterRating >= 4 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
-        <button mat-icon-button (click)="setFilter(5)" [ngClass]="{'app-icon-rated-button': filterRating >= 5 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
-    </div>
-    <button mat-raised-button (click)="setFilter(-1)">Clear</button>
-    <span class="app-button-spacer"></span>
-    <button mat-raised-button (click)="displayFotos(folderPath.value)" color="primary">Display</button>
+        <mat-form-field class="app-folder-field">
+            <input matInput #folderPath placeholder="Folder" value="">
+        </mat-form-field>
+        <div>
+            <mat-radio-group [(ngModel)]="isRating">
+                <mat-radio-button [value]="true">Rate</mat-radio-button>&nbsp;&nbsp;&nbsp;
+                <mat-radio-button [value]="false">Categorize</mat-radio-button>
+            </mat-radio-group>
+        </div>
+        
+        <div *ngIf="!isRating">
+            <button mat-icon-button (click)="setCatFilter('nature')" 
+                    [ngClass]="{'app-icon-rated-button': filterCat == 'nature' }" 
+                    class="app-icon-button"><mat-icon>nature</mat-icon>
+            </button>
+            <button mat-icon-button (click)="setCatFilter('people')" 
+                    [ngClass]="{'app-icon-rated-button': filterCat == 'people' }" 
+                    class="app-icon-button"><mat-icon>people</mat-icon>
+            </button>
+            <button mat-icon-button (click)="setCatFilter('city')" 
+                    [ngClass]="{'app-icon-rated-button': filterCat == 'city' }" 
+                    class="app-icon-button"><mat-icon>location_city</mat-icon>
+            </button>
+            <button mat-icon-button (click)="setCatFilter('')" 
+                    [ngClass]="{'app-icon-rated-button': filterCat == '' }" 
+                    class="app-icon-button"><mat-icon>category</mat-icon>
+            </button>
+        </div>
+
+        <div *ngIf="isRating">
+            <button mat-icon-button (click)="setRateFilter(1)" [ngClass]="{'app-icon-rated-button': filterRating >= 1 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
+            <button mat-icon-button (click)="setRateFilter(2)" [ngClass]="{'app-icon-rated-button': filterRating >= 2 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
+            <button mat-icon-button (click)="setRateFilter(3)" [ngClass]="{'app-icon-rated-button': filterRating >= 3 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
+            <button mat-icon-button (click)="setRateFilter(4)" [ngClass]="{'app-icon-rated-button': filterRating >= 4 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
+            <button mat-icon-button (click)="setRateFilter(5)" [ngClass]="{'app-icon-rated-button': filterRating >= 5 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
+        </div>
+        
+        <button mat-raised-button (click)="setRateFilter(-1); setCatFilter('')">Clear</button>
+        <span class="app-button-spacer"></span>
+        <button mat-raised-button (click)="displayFotos(folderPath.value)" color="primary">Display</button>
     </mat-sidenav>
 
     <mat-sidenav-content>
@@ -26,7 +53,14 @@
         </button>
         
         <span *ngIf="getCurrentFotoInfo(); let fi" > 
-          <div class="app-rate-buttons">
+            <div class="app-cat-buttons" *ngIf="!isRating">
+                <button mat-icon-button (click)="category(3)" class="app-icon-button"><mat-icon>nature</mat-icon></button>                
+                <button mat-icon-button (click)="category(1)" class="app-icon-button"><mat-icon>people</mat-icon></button>
+                <button mat-icon-button (click)="category(2)" class="app-icon-button"><mat-icon>location_city</mat-icon></button>
+                <button mat-icon-button (click)="category(2)" class="app-icon-button"><mat-icon>category</mat-icon></button>
+            </div>
+
+          <div class="app-rate-buttons" *ngIf="isRating">
               <button mat-icon-button (click)="rate(1)" [ngClass]="{'app-icon-rated-button': fi.rating >= 1 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
               <button mat-icon-button (click)="rate(2)" [ngClass]="{'app-icon-rated-button': fi.rating >= 2 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
               <button mat-icon-button (click)="rate(3)" [ngClass]="{'app-icon-rated-button': fi.rating >= 3 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
@@ -41,10 +75,10 @@
               <button mat-icon-button color="primary" (click)="delete()" class="app-icon-button"><mat-icon>delete</mat-icon></button>      
           </div>
 
-        <div class="imgbox">
-            <img class="center-fit" src="{{getCurrentFotoURL()}}">
-        </div>
-    </span>
+         <image-view id="myImage" [fotoURL]="getCurrentFotoURL()"> </image-view>
+            
+        </span>
+        
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

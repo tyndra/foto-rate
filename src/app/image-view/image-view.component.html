@@ -1,0 +1,23 @@
+<!-- <img #myImage [src]="fotoURL" class="center-fit">
+<div #myResult class="img-zoom-result" class="img-zoom-result"></div> -->
+
+<div class="center-fit">
+
+    <img imageZoom 
+        [src]="fotoURL" 
+        lensStyle="LENS" 
+        class="center-fit" 
+        clickToZoom="true" 
+        delay="1"
+        minZoomLevel=".1"
+        maxZoomLevel="1"
+    >
+</div>
+<!-- 
+<div class="center-fit" >
+<ngx-image-zoom 
+    [thumbImage]="fotoURL" 
+    class="center-fit" 
+    enableLens="true" 
+    circularLens="true" enableScrollZoom="true"></ngx-image-zoom>
+</div> -->
