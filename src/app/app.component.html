@@ -53,21 +53,28 @@
         </button>
         
         <span *ngIf="getCurrentFotoInfo(); let fi" > 
-            <div class="app-rate-buttons" *ngIf="!isRating">
+            <div  class="app-rate-buttons" *ngIf="!isRating">
                 <button mat-icon-button (click)="categorize('nature')" [ngClass]="{'app-icon-rated-button': fi.cat == 'nature' }" class="app-icon-rate-button"><mat-icon>nature</mat-icon></button>                
                 <button mat-icon-button (click)="categorize('people')" [ngClass]="{'app-icon-rated-button': fi.cat == 'people' }"class="app-icon-rate-button"><mat-icon>people</mat-icon></button>
                 <button mat-icon-button (click)="categorize('city')"   [ngClass]="{'app-icon-rated-button': fi.cat == 'city' }"class="app-icon-rate-button"><mat-icon>location_city</mat-icon></button>
                 <button mat-icon-button (click)="categorize('other')"  [ngClass]="{'app-icon-rated-button': fi.cat == 'other' }"class="app-icon-rate-button"><mat-icon>category</mat-icon></button>
             </div>
 
-          <div class="app-rate-buttons" *ngIf="isRating">
-              <button mat-icon-button (click)="rate(1)" [ngClass]="{'app-icon-rated-button': fi.rating >= 1 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
-              <button mat-icon-button (click)="rate(2)" [ngClass]="{'app-icon-rated-button': fi.rating >= 2 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
-              <button mat-icon-button (click)="rate(3)" [ngClass]="{'app-icon-rated-button': fi.rating >= 3 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
-              <button mat-icon-button (click)="rate(4)" [ngClass]="{'app-icon-rated-button': fi.rating >= 4 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
-              <button mat-icon-button (click)="rate(5)" [ngClass]="{'app-icon-rated-button': fi.rating >= 5 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
-          </div>
+            <div class="app-cat-icon"  *ngIf="isRating">
+                <mat-icon color="accent" *ngIf="fi.cat == 'nature'">nature</mat-icon>
+                <mat-icon color="accent" *ngIf="fi.cat == 'people'">people</mat-icon>
+                <mat-icon color="accent" *ngIf="fi.cat == 'city'">location_city</mat-icon>
+                <mat-icon color="accent" *ngIf="fi.cat == 'other'">category</mat-icon>
+            </div>
 
+            <div class="app-rate-buttons" *ngIf="isRating">
+                <button mat-icon-button (click)="rate(1)" [ngClass]="{'app-icon-rated-button': fi.rating >= 1 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
+                <button mat-icon-button (click)="rate(2)" [ngClass]="{'app-icon-rated-button': fi.rating >= 2 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
+                <button mat-icon-button (click)="rate(3)" [ngClass]="{'app-icon-rated-button': fi.rating >= 3 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
+                <button mat-icon-button (click)="rate(4)" [ngClass]="{'app-icon-rated-button': fi.rating >= 4 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
+                <button mat-icon-button (click)="rate(5)" [ngClass]="{'app-icon-rated-button': fi.rating >= 5 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
+            </div>
+            
           <div class="app-nav-buttons">
               <button mat-icon-button color="primary" (click)="back()" class="app-icon-button"><mat-icon>arrow_back</mat-icon></button>    
               <button mat-icon-button color="primary" (click)="forward()" class="app-icon-button"><mat-icon>arrow_forward</mat-icon></button>    
