@@ -31,6 +31,7 @@ export class FotoService {
 
     createURL(workFolder: string, fi: FotoInfo) : string {
       let fullpath = workFolder;
+      
       if (fi.cat != null && fi.cat.length > 0){
         fullpath += "/" + fi.cat;
       }

@@ -1,9 +1,16 @@
 import {MediaMatcher} from '@angular/cdk/layout';
-import {ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, OnDestroy, HostListener  } from '@angular/core';
 import {timer} from 'rxjs';
 
 import {FotoService} from "./services/foto.service";
 import {FotoInfo} from "./impl/foto.info";
+
+
+export enum KEY_CODE {
+  RIGHT_ARROW = 39,
+  LEFT_ARROW = 37,
+  ZERO = 96
+}
 
 @Component({
   selector: 'app-root',
@@ -44,6 +51,17 @@ export class AppComponent implements OnInit, OnDestroy  {
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
   
+  @HostListener('window:keydown', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    console.log(event.keyCode);
+    
+    if (event.keyCode == KEY_CODE.RIGHT_ARROW)
+        this.forward();
+    else if (event.keyCode ==  KEY_CODE.LEFT_ARROW)
+        this.back();    
+    else if (event.keyCode >  KEY_CODE.ZERO && event.keyCode <= KEY_CODE.ZERO + 5)
+        this.rate(event.keyCode - KEY_CODE.ZERO );    
+  }
 
   private displayFotos() {
     this.currentIndex = -1;

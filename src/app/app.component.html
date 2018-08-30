@@ -77,9 +77,10 @@
             
           <div class="app-nav-buttons">
               <button mat-icon-button color="primary" (click)="back()" class="app-icon-button"><mat-icon>arrow_back</mat-icon></button>    
+              <span>{{currentIndex + 1}} of {{allFotoInfos.length}}</span>
               <button mat-icon-button color="primary" (click)="forward()" class="app-icon-button"><mat-icon>arrow_forward</mat-icon></button>    
               <span class="app-button-spacer"></span>
-              <button mat-icon-button color="primary" (click)="delete()" class="app-icon-button"><mat-icon>delete</mat-icon></button>      
+              <!-- <button mat-icon-button color="primary" (click)="delete()" class="app-icon-button"><mat-icon>delete</mat-icon></button>       -->
           </div>
 
          <image-view id="myImage" [fotoURL]="getCurrentFotoURL()"> </image-view>
