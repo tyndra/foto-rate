@@ -11,33 +11,30 @@ const backend_url = "http://localhost:4200/api/";
   providedIn: 'root',
 })
 export class FotoService {
-    workFolder: string;
-
     constructor(private http: HttpClient) { 
     }
 
-    setWorkFolder(wf: string){
-      this.workFolder = wf;
+    getAll(workFolder: string, rating: number, cat: string) : Observable<any>  { 
+      let url = backend_url + "fotos/" + encodeURIComponent(workFolder);
+      
+      let body = {
+        rating: rating,
+        cat: cat
+      };
+
+      return this.http.post(url, body);
     }
 
-    getWorkFolder(): string {
-      return this.workFolder;
+    getFoto(workFolder: string, fi: FotoInfo) : Observable<any> {
+      return this.http.get(this.createURL(workFolder, fi),{responseType: "blob"});
     }
 
-    getAll(rating: number) : Observable<any>  { 
-      let url = backend_url + "fotos/" + encodeURIComponent(this.workFolder);
-      if (rating > 0 && rating <= 5)
-        url += "/"  + rating;
+    createURL(workFolder: string, fi: FotoInfo) : string {
+      let fullpath = workFolder;
+      if (fi.cat != null && fi.cat.length > 0){
+        fullpath += "/" + fi.cat;
+      }
 
-      return this.http.get(url);
-    }
-
-    getFoto(fi: FotoInfo) : Observable<any> {
-      return this.http.get(this.createURL(fi),{responseType: "blob"});
-    }
-
-    createURL(fi: FotoInfo) : string {
-      let fullpath = this.workFolder;
       if (fi.rating > 0 && fi.rating <= 5){
         fullpath += "/" + fi.rating;
       }
@@ -46,13 +43,15 @@ export class FotoService {
       return  backend_url + "foto/" + encodeURIComponent(fullpath);
     }
 
-    rate(fi: FotoInfo, rating: number) : Observable<any> {
-      let url = backend_url + "foto/" + encodeURIComponent(this.workFolder);
+    rate(workFolder: string, fi: FotoInfo, rating: number, cat: string) : Observable<any> {
+      let url = backend_url + "foto/" + encodeURIComponent(workFolder);
 
       let body = {
         name: fi.name,
         oldRating: fi.rating,
-        newRating : rating
+        newRating : rating,
+        oldCat: fi.cat,
+        newCat : cat
       };
       return this.http.put(url, body);
     }

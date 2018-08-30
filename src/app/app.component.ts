@@ -16,6 +16,7 @@ export class AppComponent implements OnInit, OnDestroy  {
 
   opened: boolean;
   isRating: boolean = true;
+  workFolder: string = "c:\\temp\\test";
   filterRating: number = -1;
   filterCat: string = "";
   allFotoInfos: FotoInfo[];
@@ -32,10 +33,9 @@ export class AppComponent implements OnInit, OnDestroy  {
   }
 
   ngOnInit(): void {
-    if (this.fotoService.getWorkFolder()){
-      this.startWork(-1);
+    if (this.workFolder){
+      this.displayFotos();
     } else {
-      this.displayFotos("c:\\temp\\test");
       this.opened = true;
     }
   }
@@ -45,15 +45,10 @@ export class AppComponent implements OnInit, OnDestroy  {
   }
   
 
-  private displayFotos(folder: string) {
-    this.fotoService.setWorkFolder(folder)
-    this.startWork(this.filterRating);
-    this.opened = false;
-  }
-
-  private startWork(rating: number) {
+  private displayFotos() {
     this.currentIndex = -1;
-    this.fotoService.getAll(rating).subscribe((data: FotoInfo[]) => {
+    this.opened = false;
+    this.fotoService.getAll(this.workFolder, this.filterRating, this.filterCat).subscribe((data: FotoInfo[]) => {
       this.allFotoInfos = data.sort(function(a, b){ 
           var textA = a.name.toUpperCase();
           var textB = b.name.toUpperCase();
@@ -61,7 +56,7 @@ export class AppComponent implements OnInit, OnDestroy  {
        });
       if (this.allFotoInfos != null && this.allFotoInfos.length > 0) {
         for (let fi of this.allFotoInfos) {
-          fi.url = this.fotoService.createURL(fi);
+          fi.url = this.fotoService.createURL(this.workFolder, fi);
         }
         this.setCurrentIndex(0);
       }
@@ -91,10 +86,19 @@ export class AppComponent implements OnInit, OnDestroy  {
 
   private rate(rating: number) {
     let fi = this.getCurrentFotoInfo();
-    this.fotoService.rate(fi, rating).subscribe((newFi: FotoInfo) => {
+    this.rateAndCategorize(fi, rating, fi.cat);
+  }
+  
+  private categorize(cat: string) {
+    let fi = this.getCurrentFotoInfo();
+    this.rateAndCategorize(fi, fi.rating, cat);
+  }
+
+  private rateAndCategorize(fi: FotoInfo, rating: number, cat: string) {
+    this.fotoService.rate(this.workFolder, fi, rating, cat).subscribe((newFi: FotoInfo) => {
       fi.name = newFi.name;
       fi.rating = newFi.rating;
-      fi.url = this.fotoService.createURL(fi);
+      fi.url = this.fotoService.createURL(this.workFolder, fi);
       if (this.canGoForward())
         this.forward();
       else
