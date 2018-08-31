@@ -32,13 +32,13 @@ export class FotoService {
     createURL(workFolder: string, fi: FotoInfo) : string {
       let fullpath = workFolder;
       
-      if (fi.cat != null && fi.cat.length > 0){
-        fullpath += "/" + fi.cat;
-      }
+      // if (fi.cat != null && fi.cat.length > 0){
+      //   fullpath += "/" + fi.cat;
+      // }
 
-      if (fi.rating > 0 && fi.rating <= 5){
-        fullpath += "/" + fi.rating;
-      }
+      // if (fi.rating > 0 && fi.rating <= 5){
+      //   fullpath += "/" + fi.rating;
+      // }
       fullpath += "/" + fi.name;
 
       return  backend_url + "foto/" + encodeURIComponent(fullpath);

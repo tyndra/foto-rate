@@ -59,7 +59,7 @@ export class AppComponent implements OnInit, OnDestroy  {
         this.forward();
     else if (event.keyCode ==  KEY_CODE.LEFT_ARROW)
         this.back();    
-    else if (event.keyCode >  KEY_CODE.ZERO && event.keyCode <= KEY_CODE.ZERO + 5)
+    else if (this.isRating && event.keyCode >  KEY_CODE.ZERO && event.keyCode <= KEY_CODE.ZERO + 5)
         this.rate(event.keyCode - KEY_CODE.ZERO );    
   }
 
