@@ -42,9 +42,11 @@
             <button mat-icon-button (click)="setRateFilter(5)" [ngClass]="{'app-icon-rated-button': filterRating >= 5 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
         </div>
         
-        <button mat-raised-button (click)="setRateFilter(-1); setCatFilter('')">Clear</button>
+        <button mat-raised-button (click)="setRateFilter(-1); setCatFilter('')">Clear Filter</button>
         <span class="app-button-spacer"></span>
         <button mat-raised-button (click)="displayFotos()" color="primary">Display</button>
+        <span class="app-button-spacer"></span>
+        <button mat-raised-button (click)="arrangeFotos()" color="accent">Arrange</button>
     </mat-sidenav>
 
     <mat-sidenav-content>

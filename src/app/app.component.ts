@@ -82,6 +82,13 @@ export class AppComponent implements OnInit, OnDestroy  {
     });
   }
 
+  private arrangeFotos() {
+    this.currentIndex = -1;
+    this.opened = false;
+    this.fotoService.arrange(this.workFolder, this.filterRating, this.filterCat).subscribe((data: any) => {
+    });
+  }
+
   private getCurrentFotoInfo() : FotoInfo {
     return this.allFotoInfos != null && 
           this.currentIndex >= 0 && this.currentIndex < this.allFotoInfos.length ? 
