@@ -10,13 +10,15 @@ import {ImageZoomModule} from 'angular2-image-zoom';
 
 import { AppComponent } from './app.component';
 import { ImageViewComponent } from './image-view/image-view.component';
-import { FotoService } from "./services/foto.service";
+import { ConfirmArrangeDialog } from "./impl/confirm-arrange.dialog/confirm-arrange.dialog";
 
 @NgModule({
   declarations: [
     AppComponent,
-    ImageViewComponent
+    ImageViewComponent,
+    ConfirmArrangeDialog
   ],
+  entryComponents: [AppComponent, ConfirmArrangeDialog],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

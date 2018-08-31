@@ -1,9 +1,11 @@
 import {MediaMatcher} from '@angular/cdk/layout';
 import {ChangeDetectorRef, Component, OnInit, OnDestroy, HostListener  } from '@angular/core';
+import {MatDialog} from '@angular/material';
 import {timer} from 'rxjs';
 
 import {FotoService} from "./services/foto.service";
 import {FotoInfo} from "./impl/foto.info";
+import { ConfirmArrangeDialog } from "./impl/confirm-arrange.dialog/confirm-arrange.dialog";
 
 
 export enum KEY_CODE {
@@ -28,11 +30,13 @@ export class AppComponent implements OnInit, OnDestroy  {
   filterCat: string = "";
   allFotoInfos: FotoInfo[];
   currentIndex: number = -1;
+  currentMessage: string = "";
 
   private _mobileQueryListener: () => void;
 
   constructor(changeDetectorRef: ChangeDetectorRef,
               media: MediaMatcher,
+              private dialog: MatDialog,
               private fotoService: FotoService) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -65,6 +69,7 @@ export class AppComponent implements OnInit, OnDestroy  {
 
   private displayFotos() {
     this.currentIndex = -1;
+    this.currentMessage = "Retrieving fotos...";
     this.opened = false;
     this.fotoService.getAll(this.workFolder, this.filterRating, this.filterCat).subscribe((data: FotoInfo[]) => {
       this.allFotoInfos = data.sort(function(a, b){ 
@@ -77,15 +82,26 @@ export class AppComponent implements OnInit, OnDestroy  {
           fi.url = this.fotoService.createURL(this.workFolder, fi);
         }
         this.setCurrentIndex(0);
-      }
-    
+      }else{
+        this.currentMessage = "No fotos that match current filter criteria.";
+        this.opened = true;
+      }    
     });
   }
 
   private arrangeFotos() {
-    this.currentIndex = -1;
-    this.opened = false;
-    this.fotoService.arrange(this.workFolder, this.filterRating, this.filterCat).subscribe((data: any) => {
+    const dialogRef = this.dialog.open(ConfirmArrangeDialog, {
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.currentIndex = -1;
+        this.currentMessage = "Arranging fotos...";
+        this.opened = false;
+        this.fotoService.arrange(this.workFolder, this.filterRating, this.filterCat).subscribe((data: any) => {
+          this.displayFotos();
+        });    
+      }
     });
   }
 
@@ -124,10 +140,12 @@ export class AppComponent implements OnInit, OnDestroy  {
       fi.name = newFi.name;
       fi.rating = newFi.rating;
       fi.url = this.fotoService.createURL(this.workFolder, fi);
-      if (this.canGoForward())
+      if (this.canGoForward()) {
         this.forward();
-      else
+      } else {
         this.currentIndex = -1;
+        this.currentMessage = "You are done!!! If you are Natasha, you did really well!!!";
+      }
     });
   }  
 
@@ -153,8 +171,9 @@ export class AppComponent implements OnInit, OnDestroy  {
 
   private setCurrentIndex(value: number){
     this.currentIndex = -1;
+    this.currentMessage = "";
     var subsrciption = timer(1).subscribe(t=> {
-      this.currentIndex = value
+      this.currentIndex = value;
       subsrciption.unsubscribe();
     });
   }

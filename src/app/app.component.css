@@ -28,6 +28,10 @@
     flex: 1;
   }
   
+  .app-side-nav {
+    padding: 10px;
+  }
+
   .app-is-mobile .app-sidenav-container {
     /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
        `<body>` to be our scrolling element for mobile layouts. */
@@ -105,3 +109,12 @@
   left: 30px;
   bottom: 15px;
 }
+
+.app-message {
+  display: block;
+  text-align: center;
+  color: lightslategray;  
+  max-width: 100%;
+  max-height: 100vh;
+  margin: auto;
+ }

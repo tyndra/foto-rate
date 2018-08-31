@@ -3,56 +3,82 @@
   <mat-sidenav-container class="app-sidenav-container"
                          [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
     <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches" fixedTopGap="56"
-                       [(opened)]="opened" (opened)="events.push('open!')" (closed)="events.push('close!')">
+                       [(opened)]="opened" (opened)="events.push('open!')" (closed)="events.push('close!')"
+                       class="app-side-nav">
       
-        <mat-form-field class="app-folder-field">
-            <input matInput #folderPath placeholder="Folder" [(ngModel)]="workFolder">
-        </mat-form-field>
-        <div>
-            <mat-radio-group [(ngModel)]="isRating">
-                <mat-radio-button [value]="true">Rate</mat-radio-button>&nbsp;&nbsp;&nbsp;
-                <mat-radio-button [value]="false">Categorize</mat-radio-button>
-            </mat-radio-group>
-        </div>
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Location</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-form-field class="app-folder-field">
+                    <input matInput #folderPath placeholder="Folder" [(ngModel)]="workFolder">
+                </mat-form-field>
+            </mat-card-content>
+        </mat-card>
+        &nbsp;
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Filter</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div>
+                    <button mat-icon-button (click)="setCatFilter('nature')" 
+                            [ngClass]="{'app-icon-rated-button': filterCat == 'nature' }" 
+                            class="app-icon-button"><mat-icon>nature</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="setCatFilter('people')" 
+                            [ngClass]="{'app-icon-rated-button': filterCat == 'people' }" 
+                            class="app-icon-button"><mat-icon>people</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="setCatFilter('city')" 
+                            [ngClass]="{'app-icon-rated-button': filterCat == 'city' }" 
+                            class="app-icon-button"><mat-icon>location_city</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="setCatFilter('other')" 
+                            [ngClass]="{'app-icon-rated-button': filterCat == 'other' }" 
+                            class="app-icon-button"><mat-icon>category</mat-icon>
+                    </button>
+                </div>
         
-        <div>
-            <button mat-icon-button (click)="setCatFilter('nature')" 
-                    [ngClass]="{'app-icon-rated-button': filterCat == 'nature' }" 
-                    class="app-icon-button"><mat-icon>nature</mat-icon>
-            </button>
-            <button mat-icon-button (click)="setCatFilter('people')" 
-                    [ngClass]="{'app-icon-rated-button': filterCat == 'people' }" 
-                    class="app-icon-button"><mat-icon>people</mat-icon>
-            </button>
-            <button mat-icon-button (click)="setCatFilter('city')" 
-                    [ngClass]="{'app-icon-rated-button': filterCat == 'city' }" 
-                    class="app-icon-button"><mat-icon>location_city</mat-icon>
-            </button>
-            <button mat-icon-button (click)="setCatFilter('other')" 
-                    [ngClass]="{'app-icon-rated-button': filterCat == 'other' }" 
-                    class="app-icon-button"><mat-icon>category</mat-icon>
-            </button>
-        </div>
+                <div>
+                    <button mat-icon-button (click)="setRateFilter(1)" [ngClass]="{'app-icon-rated-button': filterRating >= 1 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
+                    <button mat-icon-button (click)="setRateFilter(2)" [ngClass]="{'app-icon-rated-button': filterRating >= 2 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
+                    <button mat-icon-button (click)="setRateFilter(3)" [ngClass]="{'app-icon-rated-button': filterRating >= 3 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
+                    <button mat-icon-button (click)="setRateFilter(4)" [ngClass]="{'app-icon-rated-button': filterRating >= 4 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
+                    <button mat-icon-button (click)="setRateFilter(5)" [ngClass]="{'app-icon-rated-button': filterRating >= 5 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
+                </div>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-raised-button (click)="setRateFilter(-1); setCatFilter('')">Clear Filter</button>
+            </mat-card-actions>
+        </mat-card>
+        &nbsp;
+        <mat-card>
+           <mat-card-header>
+                <mat-card-title>What to do</mat-card-title>
+            </mat-card-header>
+                    
+            <mat-card-content>
+                <mat-radio-group [(ngModel)]="isRating">
+                    <mat-radio-button [value]="true">Rate</mat-radio-button>&nbsp;&nbsp;&nbsp;
+                    <mat-radio-button [value]="false">Categorize</mat-radio-button>
+                </mat-radio-group>
+            </mat-card-content>
 
-        <div>
-            <button mat-icon-button (click)="setRateFilter(1)" [ngClass]="{'app-icon-rated-button': filterRating >= 1 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
-            <button mat-icon-button (click)="setRateFilter(2)" [ngClass]="{'app-icon-rated-button': filterRating >= 2 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
-            <button mat-icon-button (click)="setRateFilter(3)" [ngClass]="{'app-icon-rated-button': filterRating >= 3 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
-            <button mat-icon-button (click)="setRateFilter(4)" [ngClass]="{'app-icon-rated-button': filterRating >= 4 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
-            <button mat-icon-button (click)="setRateFilter(5)" [ngClass]="{'app-icon-rated-button': filterRating >= 5 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
-        </div>
-        
-        <button mat-raised-button (click)="setRateFilter(-1); setCatFilter('')">Clear Filter</button>
-        <span class="app-button-spacer"></span>
-        <button mat-raised-button (click)="displayFotos()" color="primary">Display</button>
-        <span class="app-button-spacer"></span>
-        <button mat-raised-button (click)="arrangeFotos()" color="accent">Arrange</button>
+            <mat-card-actions>
+                <button mat-raised-button (click)="displayFotos()" color="primary" [disabled]="!workFolder">Display</button>                
+                <button mat-raised-button (click)="arrangeFotos()" color="accent" [disabled]="!workFolder">Arrange</button>
+            </mat-card-actions>
+        </mat-card>
+
     </mat-sidenav>
 
     <mat-sidenav-content>
         <button mat-fab color="primary" (click)="snav.toggle()" class="app-settings-button">
             <mat-icon>menu</mat-icon>
         </button>
+        <span *ngIf="currentMessage" class="app-message"><h1>{{currentMessage}}</h1></span>
         
         <span *ngIf="getCurrentFotoInfo(); let fi" > 
             <div  class="app-rate-buttons" *ngIf="!isRating">
