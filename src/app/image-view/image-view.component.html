@@ -1,23 +1,37 @@
-<!-- <img #myImage [src]="fotoURL" class="center-fit">
-<div #myResult class="img-zoom-result" class="img-zoom-result"></div> -->
-
 <div class="center-fit">
 
-    <img imageZoom 
-        [src]="fotoURL" 
+    <ngx-image-zoom
+        [thumbImage]="url"
+        [fullImage]="fullUrl"
+        [zoomMode]="'click'"        
+        [enableLens]="true"
+        [lensWidth]="400"
+        [lensHeight]="400"
+        [enableScrollZoom]="true"
+        [magnification]="1"
+    ></ngx-image-zoom>
+
+    <!-- <ngx-image-zoom
+        [thumbImage]="url"
+        [fullImage]="allowZoom ? fullUrl : ''"
+        [zoomMode]="allowZoom ? 'click' : ''"
+        (click)="allowZoom = !allowZoom"
+        [enableLens]="true"
+        [lensWidth]="400"
+        [lensHeight]="400"
+        [enableScrollZoom]="true"
+        [magnification]="1"
+    ></ngx-image-zoom> -->
+
+    <!-- <img 
+        [allowZoom]="allowZoom"
+        [src]="url" 
+        [imageZoom]="allowZoom ? fullUrl : ''"
         lensStyle="LENS" 
-        class="center-fit" 
-        clickToZoom="true" 
+        class="center-fit"         
         delay="1"
-        minZoomLevel=".1"
-        maxZoomLevel="1"
-    >
+        minZoomLevel=".2"
+        maxZoomLevel="1.5"
+        (click)="allowZoom = !allowZoom"
+    > -->
 </div>
-<!-- 
-<div class="center-fit" >
-<ngx-image-zoom 
-    [thumbImage]="fotoURL" 
-    class="center-fit" 
-    enableLens="true" 
-    circularLens="true" enableScrollZoom="true"></ngx-image-zoom>
-</div> -->

@@ -4,4 +4,5 @@ export class FotoInfo{
     cat: string;
     //blob: any;
     url: string;
+    fullUrl: string;
 }

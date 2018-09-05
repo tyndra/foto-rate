@@ -14,34 +14,29 @@ export class FotoService {
     constructor(private http: HttpClient) { 
     }
 
-    getAll(workFolder: string, rating: number, cat: string) : Observable<any>  { 
+    getAll(workFolder: string, rating: number, includeHigherRating: boolean, cat: string) : Observable<any>  { 
       let url = backend_url + "fotos/" + encodeURIComponent(workFolder);
       
       let body = {
         rating: rating,
+        includeHigherRating: includeHigherRating, 
         cat: cat
       };
 
       return this.http.post(url, body);
     }
 
-    getFoto(workFolder: string, fi: FotoInfo) : Observable<any> {
-      return this.http.get(this.createURL(workFolder, fi),{responseType: "blob"});
-    }
+    // getFoto(workFolder: string, fi: FotoInfo) : Observable<any> {
+    //   return this.http.get(this.createURL(workFolder, fi),{responseType: "blob"});
+    // }
 
-    createURL(workFolder: string, fi: FotoInfo) : string {
-      let fullpath = workFolder;
-      
-      // if (fi.cat != null && fi.cat.length > 0){
-      //   fullpath += "/" + fi.cat;
-      // }
+    createURL(workFolder: string, fi: FotoInfo, resized: boolean) : string {
+      let fullpath = workFolder + "\\" + fi.name;
+      let api = "foto/";
+      if (resized)
+        api += "resize/";
 
-      // if (fi.rating > 0 && fi.rating <= 5){
-      //   fullpath += "/" + fi.rating;
-      // }
-      fullpath += "/" + fi.name;
-
-      return  backend_url + "foto/" + encodeURIComponent(fullpath);
+      return  backend_url + api + encodeURIComponent(fullpath);
     }
 
     rate(workFolder: string, fi: FotoInfo, rating: number, cat: string) : Observable<any> {
@@ -57,11 +52,12 @@ export class FotoService {
       return this.http.put(url, body);
     }
 
-    arrange(workFolder: string, rating: number, cat: string) : Observable<any> {
+    arrange(workFolder: string, rating: number, includeHigherRating: boolean, cat: string) : Observable<any> {
       let url = backend_url + "fotos/" + encodeURIComponent(workFolder);
 
       let body = {
         rating: rating,
+        includeHigherRating: includeHigherRating,
         cat : cat
       };
       return this.http.put(url, body);

@@ -25,9 +25,11 @@ export class AppComponent implements OnInit, OnDestroy  {
 
   opened: boolean;
   isRating: boolean = true;
-  workFolder: string = "c:\\temp\\test";
+  workFolder: string = "C:\\temp\\test";
   filterRating: number = -1;
   filterCat: string = "";
+  includeHigherRating: boolean = true;
+  unratedOnly: boolean = false;
   allFotoInfos: FotoInfo[];
   currentIndex: number = -1;
   currentMessage: string = "";
@@ -57,21 +59,30 @@ export class AppComponent implements OnInit, OnDestroy  {
   
   @HostListener('window:keydown', ['$event'])
   keyEvent(event: KeyboardEvent) {
-    console.log(event.keyCode);
+    //console.log(event.keyCode);
     
     if (event.keyCode == KEY_CODE.RIGHT_ARROW)
         this.forward();
+    else if (event.keyCode == 78)
+        this.categorize('nature');
+    else if (event.keyCode == 80)
+        this.categorize('people');
+    else if (event.keyCode == 67)
+        this.categorize('city');
     else if (event.keyCode ==  KEY_CODE.LEFT_ARROW)
         this.back();    
     else if (this.isRating && event.keyCode >  KEY_CODE.ZERO && event.keyCode <= KEY_CODE.ZERO + 5)
         this.rate(event.keyCode - KEY_CODE.ZERO );    
+
   }
 
   private displayFotos() {
     this.currentIndex = -1;
     this.currentMessage = "Retrieving fotos...";
     this.opened = false;
-    this.fotoService.getAll(this.workFolder, this.filterRating, this.filterCat).subscribe((data: FotoInfo[]) => {
+    this.fotoService.getAll(this.workFolder, 
+                            this.unratedOnly ? -100 : this.filterRating, 
+                            this.includeHigherRating, this.filterCat).subscribe((data: FotoInfo[]) => {
       this.allFotoInfos = data.sort(function(a, b){ 
           var textA = a.name.toUpperCase();
           var textB = b.name.toUpperCase();
@@ -79,7 +90,8 @@ export class AppComponent implements OnInit, OnDestroy  {
        });
       if (this.allFotoInfos != null && this.allFotoInfos.length > 0) {
         for (let fi of this.allFotoInfos) {
-          fi.url = this.fotoService.createURL(this.workFolder, fi);
+          fi.url = this.fotoService.createURL(this.workFolder, fi, true);
+          fi.fullUrl = this.fotoService.createURL(this.workFolder, fi, false);
         }
         this.setCurrentIndex(0);
       }else{
@@ -98,7 +110,7 @@ export class AppComponent implements OnInit, OnDestroy  {
         this.currentIndex = -1;
         this.currentMessage = "Arranging fotos...";
         this.opened = false;
-        this.fotoService.arrange(this.workFolder, this.filterRating, this.filterCat).subscribe((data: any) => {
+        this.fotoService.arrange(this.workFolder, this.filterRating, this.includeHigherRating, this.filterCat).subscribe((data: any) => {
           this.displayFotos();
         });    
       }
@@ -115,6 +127,12 @@ export class AppComponent implements OnInit, OnDestroy  {
     let fi = this.getCurrentFotoInfo();
 
     return fi != null ? fi.url : null;
+  }
+
+  private getCurrentFotoFullURL() : string {
+    let fi = this.getCurrentFotoInfo();
+
+    return fi != null ? fi.fullUrl : null;
   }
 
   private setRateFilter(filter: number){
@@ -139,7 +157,9 @@ export class AppComponent implements OnInit, OnDestroy  {
     this.fotoService.rate(this.workFolder, fi, rating, cat).subscribe((newFi: FotoInfo) => {
       fi.name = newFi.name;
       fi.rating = newFi.rating;
-      fi.url = this.fotoService.createURL(this.workFolder, fi);
+      fi.cat = newFi.cat;
+      fi.url = this.fotoService.createURL(this.workFolder, fi, true);
+      fi.fullUrl = this.fotoService.createURL(this.workFolder, fi, false);
       if (this.canGoForward()) {
         this.forward();
       } else {

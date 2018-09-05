@@ -41,16 +41,18 @@
                     </button>
                 </div>
         
-                <div>
+                <div *ngIf="!unratedOnly">
                     <button mat-icon-button (click)="setRateFilter(1)" [ngClass]="{'app-icon-rated-button': filterRating >= 1 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
                     <button mat-icon-button (click)="setRateFilter(2)" [ngClass]="{'app-icon-rated-button': filterRating >= 2 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
                     <button mat-icon-button (click)="setRateFilter(3)" [ngClass]="{'app-icon-rated-button': filterRating >= 3 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
                     <button mat-icon-button (click)="setRateFilter(4)" [ngClass]="{'app-icon-rated-button': filterRating >= 4 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
                     <button mat-icon-button (click)="setRateFilter(5)" [ngClass]="{'app-icon-rated-button': filterRating >= 5 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
+                    <mat-checkbox [(ngModel)]="includeHigherRating">Include higher rating</mat-checkbox>
                 </div>
             </mat-card-content>
             <mat-card-actions>
                 <button mat-raised-button (click)="setRateFilter(-1); setCatFilter('')">Clear Filter</button>
+                &nbsp;<mat-checkbox [(ngModel)]="unratedOnly">Unrated only</mat-checkbox>
             </mat-card-actions>
         </mat-card>
         &nbsp;
@@ -111,7 +113,7 @@
               <!-- <button mat-icon-button color="primary" (click)="delete()" class="app-icon-button"><mat-icon>delete</mat-icon></button>       -->
           </div>
 
-         <image-view id="myImage" [fotoURL]="getCurrentFotoURL()"> </image-view>
+         <image-view id="myImage" [url]="getCurrentFotoURL()" [fullUrl]="getCurrentFotoFullURL()"> </image-view>
             
         </span>
         
