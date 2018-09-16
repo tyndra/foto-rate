@@ -1,14 +1,15 @@
-<div class="center-fit">
+<div class="center-fit" ng-blur><!--  *ngIf="visible" [@myAnimation]> -->
 
     <ngx-image-zoom
         [thumbImage]="url"
-        [fullImage]="fullUrl"
+        [fullImage]="fullImageUrl"
         [zoomMode]="'click'"        
         [enableLens]="true"
         [lensWidth]="400"
         [lensHeight]="400"
         [enableScrollZoom]="true"
         [magnification]="1"
+        class="center-fit"
     ></ngx-image-zoom>
 
     <!-- <ngx-image-zoom

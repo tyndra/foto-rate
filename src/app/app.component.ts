@@ -6,6 +6,7 @@ import {timer} from 'rxjs';
 import {FotoService} from "./services/foto.service";
 import {FotoInfo} from "./impl/foto.info";
 import { ConfirmArrangeDialog } from "./impl/confirm-arrange.dialog/confirm-arrange.dialog";
+import { CatDefinition } from './impl/cat-definition';
 
 
 export enum KEY_CODE {
@@ -17,7 +18,7 @@ export enum KEY_CODE {
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit, OnDestroy  {
   
@@ -33,6 +34,7 @@ export class AppComponent implements OnInit, OnDestroy  {
   allFotoInfos: FotoInfo[];
   currentIndex: number = -1;
   currentMessage: string = "";
+  cats: CatDefinition[] = null;
 
   private _mobileQueryListener: () => void;
 
@@ -46,11 +48,14 @@ export class AppComponent implements OnInit, OnDestroy  {
   }
 
   ngOnInit(): void {
-    if (this.workFolder){
-      this.displayFotos();
-    } else {
-      this.opened = true;
-    }
+    this.fotoService.getCats(this.workFolder).subscribe((data: CatDefinition[]) => {
+        this.cats = data;
+        if (this.workFolder){
+          this.displayFotos();
+        } else {
+          this.opened = true;
+        }
+    });
   }
 
   ngOnDestroy(): void {
@@ -63,19 +68,21 @@ export class AppComponent implements OnInit, OnDestroy  {
     
     if (event.keyCode == KEY_CODE.RIGHT_ARROW)
         this.forward();
-    else if (event.keyCode == 78)
-        this.categorize('nature');
-    else if (event.keyCode == 80)
-        this.categorize('people');
-    else if (event.keyCode == 67)
-        this.categorize('city');
     else if (event.keyCode ==  KEY_CODE.LEFT_ARROW)
         this.back();    
     else if (this.isRating && event.keyCode >  KEY_CODE.ZERO && event.keyCode <= KEY_CODE.ZERO + 5)
         this.rate(event.keyCode - KEY_CODE.ZERO );    
-
+    else{
+      for (let cat of this.cats) {
+        if (cat.key == event.keyCode)
+          this.categorize(cat.name);
+      }
+    }
   }
 
+  private getKeyCode(key: number){
+    return String.fromCharCode(key);
+  }
   private displayFotos() {
     this.currentIndex = -1;
     this.currentMessage = "Retrieving fotos...";

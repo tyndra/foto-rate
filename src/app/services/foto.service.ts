@@ -26,6 +26,12 @@ export class FotoService {
       return this.http.post(url, body);
     }
 
+    getCats(workFolder: string) : Observable<any>  { 
+      let url = backend_url + "config/cat/" + encodeURIComponent(workFolder);
+     
+      return this.http.get(url);
+    }
+
     // getFoto(workFolder: string, fi: FotoInfo) : Observable<any> {
     //   return this.http.get(this.createURL(workFolder, fi),{responseType: "blob"});
     // }

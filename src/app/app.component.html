@@ -23,21 +23,10 @@
             </mat-card-header>
             <mat-card-content>
                 <div>
-                    <button mat-icon-button (click)="setCatFilter('nature')" 
-                            [ngClass]="{'app-icon-rated-button': filterCat == 'nature' }" 
-                            class="app-icon-button"><mat-icon>nature</mat-icon>
-                    </button>
-                    <button mat-icon-button (click)="setCatFilter('people')" 
-                            [ngClass]="{'app-icon-rated-button': filterCat == 'people' }" 
-                            class="app-icon-button"><mat-icon>people</mat-icon>
-                    </button>
-                    <button mat-icon-button (click)="setCatFilter('city')" 
-                            [ngClass]="{'app-icon-rated-button': filterCat == 'city' }" 
-                            class="app-icon-button"><mat-icon>location_city</mat-icon>
-                    </button>
-                    <button mat-icon-button (click)="setCatFilter('other')" 
-                            [ngClass]="{'app-icon-rated-button': filterCat == 'other' }" 
-                            class="app-icon-button"><mat-icon>category</mat-icon>
+                    <button *ngFor="let cat of cats" mat-icon-button (click)="setCatFilter(cat.name)" 
+                            [ngClass]="{'app-icon-rated-button': filterCat == cat.name }" 
+                            matTooltip = "{{cat.name}} , shortcut: {{getKeyCode(cat.key)}}"  
+                            class="app-icon-rate-button"><mat-icon>{{cat.icon}}</mat-icon>
                     </button>
                 </div>
         
@@ -82,19 +71,23 @@
         </button>
         <span *ngIf="currentMessage" class="app-message"><h1>{{currentMessage}}</h1></span>
         
-        <span *ngIf="getCurrentFotoInfo(); let fi" > 
+        <span *ngIf="getCurrentFotoInfo(); let fi"> 
             <div  class="app-rate-buttons" *ngIf="!isRating">
-                <button mat-icon-button (click)="categorize('nature')" [ngClass]="{'app-icon-rated-button': fi.cat == 'nature' }" class="app-icon-rate-button"><mat-icon>nature</mat-icon></button>                
-                <button mat-icon-button (click)="categorize('people')" [ngClass]="{'app-icon-rated-button': fi.cat == 'people' }"class="app-icon-rate-button"><mat-icon>people</mat-icon></button>
-                <button mat-icon-button (click)="categorize('city')"   [ngClass]="{'app-icon-rated-button': fi.cat == 'city' }"class="app-icon-rate-button"><mat-icon>location_city</mat-icon></button>
-                <button mat-icon-button (click)="categorize('other')"  [ngClass]="{'app-icon-rated-button': fi.cat == 'other' }"class="app-icon-rate-button"><mat-icon>category</mat-icon></button>
+                <button *ngFor="let cat of cats" 
+                        mat-icon-button 
+                        (click)="categorize(cat.name)" 
+                        [ngClass]="{'app-icon-rated-button': fi.cat == cat.name }"
+                        matTooltip = "{{cat.name}} , shortcut: {{getKeyCode(cat.key)}}"  
+                        class="app-icon-rate-button"><mat-icon>{{cat.icon}}</mat-icon>
+                    </button>                
             </div>
 
             <div class="app-cat-icon"  *ngIf="isRating">
-                <mat-icon color="accent" *ngIf="fi.cat == 'nature'">nature</mat-icon>
-                <mat-icon color="accent" *ngIf="fi.cat == 'people'">people</mat-icon>
-                <mat-icon color="accent" *ngIf="fi.cat == 'city'">location_city</mat-icon>
-                <mat-icon color="accent" *ngIf="fi.cat == 'other'">category</mat-icon>
+                <span *ngFor="let cat of cats">
+                        <mat-icon  color="accent"
+                         *ngIf="fi.cat == cat.name"
+                         matTooltip = "{{cat.name}} , shortcut: {{getKeyCode(cat.key)}}">{{cat.icon}}</mat-icon>
+                </span>
             </div>
 
             <div class="app-rate-buttons" *ngIf="isRating">
@@ -105,8 +98,15 @@
                 <button mat-icon-button (click)="rate(5)" [ngClass]="{'app-icon-rated-button': fi.rating >= 5 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
             </div>
             
+
           <div class="app-nav-buttons">
-              <button mat-icon-button color="primary" (click)="back()" class="app-icon-button"><mat-icon>arrow_back</mat-icon></button>    
+              
+            <!-- <mat-paginator [length]="allFotoInfos.length" [hidePageSize]='true'
+                [pageSize]="1" [pageIndex]="currentIndex"
+                (page)="setCurrentIndex($event.pageIndex)">
+            </mat-paginator> -->
+        
+            <button mat-icon-button color="primary" (click)="back()" class="app-icon-button"><mat-icon>arrow_back</mat-icon></button>    
               <span>{{currentIndex + 1}} of {{allFotoInfos.length}}</span>
               <button mat-icon-button color="primary" (click)="forward()" class="app-icon-button"><mat-icon>arrow_forward</mat-icon></button>    
               <span class="app-button-spacer"></span>
