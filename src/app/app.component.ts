@@ -113,11 +113,11 @@ export class AppComponent implements OnInit, OnDestroy  {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result.arrange) {
         this.currentIndex = -1;
         this.currentMessage = "Arranging fotos...";
         this.opened = false;
-        this.fotoService.arrange(this.workFolder, this.filterRating, this.includeHigherRating, this.filterCat).subscribe((data: any) => {
+        this.fotoService.arrange(this.workFolder, this.filterRating, this.includeHigherRating, this.filterCat, result.moveOrf).subscribe((data: any) => {
           this.displayFotos();
         });    
       }

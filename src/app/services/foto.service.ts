@@ -58,13 +58,14 @@ export class FotoService {
       return this.http.put(url, body);
     }
 
-    arrange(workFolder: string, rating: number, includeHigherRating: boolean, cat: string) : Observable<any> {
+    arrange(workFolder: string, rating: number, includeHigherRating: boolean, cat: string, moveOrf:boolean) : Observable<any> {
       let url = backend_url + "fotos/" + encodeURIComponent(workFolder);
 
       let body = {
         rating: rating,
         includeHigherRating: includeHigherRating,
-        cat : cat
+        cat : cat,
+        moveOrf: moveOrf
       };
       return this.http.put(url, body);
     }

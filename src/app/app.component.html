@@ -106,6 +106,7 @@
                 (page)="setCurrentIndex($event.pageIndex)">
             </mat-paginator> -->
         
+            {{fi.name}}
             <button mat-icon-button color="primary" (click)="back()" class="app-icon-button"><mat-icon>arrow_back</mat-icon></button>    
               <span>{{currentIndex + 1}} of {{allFotoInfos.length}}</span>
               <button mat-icon-button color="primary" (click)="forward()" class="app-icon-button"><mat-icon>arrow_forward</mat-icon></button>    

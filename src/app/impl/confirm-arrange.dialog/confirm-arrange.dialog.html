@@ -1,6 +1,11 @@
 <h1 mat-dialog-title>Arrange fotos?</h1>
-<mat-dialog-content>This will change the directory structure and will organize you images by the rating/category.</mat-dialog-content>
+<mat-dialog-content>
+  <p>
+  This will change the directory structure and will organize you images by the rating/category.
+</p>
+  <mat-checkbox [(ngModel)]="moveOrf">Move ORF files</mat-checkbox>
+</mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="false">Cancel</button>
-  <button mat-button color="warn" [mat-dialog-close]="true">Continue</button>
+  <button mat-button [mat-dialog-close]="false" (click)="onNoClick()">Cancel</button>
+  <button mat-button color="warn" (click)="onYesClick()">Continue</button>
 </mat-dialog-actions>

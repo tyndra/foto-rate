@@ -6,11 +6,17 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
     templateUrl: 'confirm-arrange.dialog.html',
   })
   export class ConfirmArrangeDialog {
-  
-    constructor() {}
-  
-    // onNoClick(): void {
-    //   this.dialogRef.close();
-    // }
+    private moveOrf: boolean = true;
+
+    constructor(
+      public dialogRef: MatDialogRef<ConfirmArrangeDialog>) {
+      }
+
+    onNoClick(): void {
+      this.dialogRef.close({arrange: false});
+    }
+    onYesClick(): void {
+      this.dialogRef.close({arrange: true, moveOrf: this.moveOrf});
+    }
   }
   
