@@ -60,17 +60,24 @@
             <mat-card-actions>
                 <button mat-raised-button (click)="displayFotos()" color="primary" [disabled]="!workFolder">Display</button>                
                 <button mat-raised-button (click)="arrangeFotos()" color="accent" [disabled]="!workFolder">Arrange</button>
+                <button mat-raised-button (click)="opened=false">Cancel</button>
             </mat-card-actions>
         </mat-card>
 
     </mat-sidenav>
 
-    <mat-sidenav-content>
+    <mat-sidenav-content class="app-content">
         <button mat-fab color="primary" (click)="snav.toggle()" class="app-settings-button">
             <mat-icon>menu</mat-icon>
         </button>
-        <span *ngIf="currentMessage" class="app-message"><h1>{{currentMessage}}</h1></span>
-        
+        <span  class="app-message">
+            <span *ngIf="currentMessage">
+                <h1>{{currentMessage}}</h1>
+            </span>
+            <span *ngIf="isBusy">
+                <mat-spinner></mat-spinner>
+            </span>
+        </span>        
         <span *ngIf="getCurrentFotoInfo(); let fi"> 
             <div  class="app-rate-buttons" *ngIf="!isRating">
                 <button *ngFor="let cat of cats" 
@@ -98,21 +105,15 @@
                 <button mat-icon-button (click)="rate(5)" [ngClass]="{'app-icon-rated-button': fi.rating >= 5 }" class="app-icon-rate-button"><mat-icon>star</mat-icon></button>
             </div>
             
-
           <div class="app-nav-buttons">
-              
-            <!-- <mat-paginator [length]="allFotoInfos.length" [hidePageSize]='true'
+            <mat-chip-list class="app-image-info">
+                <mat-chip color="primary" selected>{{fi.name}}</mat-chip>
+            </mat-chip-list>
+            <mat-paginator [length]="allFotoInfos.length" [hidePageSize]='true'
                 [pageSize]="1" [pageIndex]="currentIndex"
                 (page)="setCurrentIndex($event.pageIndex)">
-            </mat-paginator> -->
-        
-            {{fi.name}}
-            <button mat-icon-button color="primary" (click)="back()" class="app-icon-button"><mat-icon>arrow_back</mat-icon></button>    
-              <span>{{currentIndex + 1}} of {{allFotoInfos.length}}</span>
-              <button mat-icon-button color="primary" (click)="forward()" class="app-icon-button"><mat-icon>arrow_forward</mat-icon></button>    
-              <span class="app-button-spacer"></span>
-              <!-- <button mat-icon-button color="primary" (click)="delete()" class="app-icon-button"><mat-icon>delete</mat-icon></button>       -->
-          </div>
+            </mat-paginator>
+            </div>
 
          <image-view id="myImage" [url]="getCurrentFotoURL()" [fullUrl]="getCurrentFotoFullURL()"> </image-view>
             

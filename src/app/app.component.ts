@@ -29,11 +29,12 @@ export class AppComponent implements OnInit, OnDestroy  {
   workFolder: string = "C:\\temp\\test";
   filterRating: number = -1;
   filterCat: string = "";
-  includeHigherRating: boolean = true;
+  includeHigherRating: boolean = false;
   unratedOnly: boolean = false;
   allFotoInfos: FotoInfo[];
   currentIndex: number = -1;
   currentMessage: string = "";
+  isBusy: boolean = false;
   cats: CatDefinition[] = null;
 
   private _mobileQueryListener: () => void;
@@ -83,10 +84,13 @@ export class AppComponent implements OnInit, OnDestroy  {
   private getKeyCode(key: number){
     return String.fromCharCode(key);
   }
+
   private displayFotos() {
     this.currentIndex = -1;
-    this.currentMessage = "Retrieving fotos...";
+    this.currentMessage = "retrieving fotos...";
+    this.isBusy = true;
     this.opened = false;
+
     this.fotoService.getAll(this.workFolder, 
                             this.unratedOnly ? -100 : this.filterRating, 
                             this.includeHigherRating, this.filterCat).subscribe((data: FotoInfo[]) => {
@@ -102,7 +106,8 @@ export class AppComponent implements OnInit, OnDestroy  {
         }
         this.setCurrentIndex(0);
       }else{
-        this.currentMessage = "No fotos that match current filter criteria.";
+        this.currentMessage = "no fotos that match current filter criteria.";
+        this.isBusy = false;
         this.opened = true;
       }    
     });
@@ -115,10 +120,17 @@ export class AppComponent implements OnInit, OnDestroy  {
     dialogRef.afterClosed().subscribe(result => {
       if (result.arrange) {
         this.currentIndex = -1;
-        this.currentMessage = "Arranging fotos...";
+        this.currentMessage = "arranging fotos...";
+        this.isBusy = true;
         this.opened = false;
-        this.fotoService.arrange(this.workFolder, this.filterRating, this.includeHigherRating, this.filterCat, result.moveOrf).subscribe((data: any) => {
-          this.displayFotos();
+        this.fotoService.arrange(this.workFolder, this.filterRating, this.includeHigherRating, this.filterCat, result.moveOrf).subscribe((data: any) => { 
+            this.currentMessage = data.filesMoved + " foto(s) arranged.";
+            if (data.filesMoveErrors)
+              this.currentMessage += "<br>" + data.filesMoveErrors + " errors.";
+            if (data.filesSkipped)
+              this.currentMessage += "<br>" + data.filesSkipped + " files skipped.";
+            this.isBusy = false;
+            this.opened = true;
         });    
       }
     });
@@ -171,7 +183,8 @@ export class AppComponent implements OnInit, OnDestroy  {
         this.forward();
       } else {
         this.currentIndex = -1;
-        this.currentMessage = "You are done!!! If you are Natasha, you did really well!!!";
+        this.currentMessage = "you are done!!! If you are Natasha, you did really well!!!";
+        this.isBusy = false;
       }
     });
   }  
@@ -199,8 +212,10 @@ export class AppComponent implements OnInit, OnDestroy  {
   private setCurrentIndex(value: number){
     this.currentIndex = -1;
     this.currentMessage = "";
+    this.isBusy = true;
     var subsrciption = timer(1).subscribe(t=> {
       this.currentIndex = value;
+      this.isBusy = false;
       subsrciption.unsubscribe();
     });
   }
