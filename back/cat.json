@@ -1,0 +1,33 @@
+[
+    {
+        "name": "nature",
+        "icon": "nature",
+        "key": 78
+    },
+    {
+        "name": "people",
+        "icon": "wc",
+        "key": 80
+    },
+    {
+        "name": "city",
+        "icon": "location_city",
+        "key": 67
+    },
+    {
+        "name": "animal",
+        "icon": "bug_report",
+        "key": 65
+    },
+    {
+        "name": "other",
+        "icon": "category",
+        "key": 79
+    }
+    ,
+    {
+        "name": "natasha",
+        "icon": "face",
+        "key": 87
+    }
+]
