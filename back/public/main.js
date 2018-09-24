@@ -156,7 +156,7 @@ var AppComponent = /** @class */ (function () {
                 _this.setCurrentIndex(0);
             }
             else {
-                _this.currentMessage = "no fotos that match current filter criteria.<br>AAAA";
+                _this.currentMessage = "no fotos that match current filter criteria.";
                 _this.isBusy = false;
                 _this.opened = true;
             }
