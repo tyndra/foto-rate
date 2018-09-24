@@ -138,7 +138,7 @@ exports.arrange = function(folder, rating, includeHigherRating, category, moveOr
         if (count > 0){
             let updateStatus = () => {
                 if (filesMoved + filesMoveErrors + filesSkipped == count){
-                    console.log("arrange: filesMoved" + filesMoved + ",  filesMoveErrors: " + filesMoveErrors + ",  filesSkipped: " + filesSkipped);
+                    console.log("arrange: filesMoved: " + filesMoved + ",  filesMoveErrors: " + filesMoveErrors + ",  filesSkipped: " + filesSkipped);
                     resolve({ filesMoved: filesMoved, filesMoveErrors: filesMoveErrors, filesSkipped: filesSkipped });
                 }
             }
@@ -166,18 +166,24 @@ exports.arrange = function(folder, rating, includeHigherRating, category, moveOr
                                         let orfName = image.name.substring(0, dotIndex) + ".orf";
                                         source = folder + "/" + orfName;
                                         dest =  destFolder + "/orf/" + orfName;
-                                        mv(source, dest, {mkdirp: true},  function(err) {
-                                            if (err != null) {
-                                                console.error("arrange: no orf file source" + source + ",  dest: " + dest + ",  err: " + err);
-                                                filesMoveErrors++;
-                                                updateStatus();
-                                            }
-                                            else {
-                                                filesMoved++;
-                                                updateStatus();
-                                                console.info("arrange: orf moved  source" + source + ",  dest: " + dest + ",  err: " + err);
-                                            }
-                                        });
+                                        if (fs.existsSync(source)) {
+                                            mv(source, dest, {mkdirp: true},  function(err) {
+                                                if (err != null) {
+                                                    console.error("arrange: no orf file source" + source + ",  dest: " + dest + ",  err: " + err);
+                                                    filesMoveErrors++;
+                                                    updateStatus();
+                                                }
+                                                else {
+                                                    filesMoved++;
+                                                    updateStatus();
+                                                    console.info("arrange: orf moved  source" + source + ",  dest: " + dest + ",  err: " + err);
+                                                }
+                                            });
+                                        }else{
+                                            filesMoved++;
+                                            updateStatus();
+                                            console.info("arrange: no orf file found  at " + source);
+                                        }
                                     }
                                 } else{
                                     filesMoved++;

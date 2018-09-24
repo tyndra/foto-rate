@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 import {FotoInfo} from "../impl/foto.info";
 
-const backend_url = "http://localhost:4200/api/";
+const backend_url = "";//"http://localhost:4200/api/";
 
 @Injectable({
   providedIn: 'root',

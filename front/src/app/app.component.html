@@ -71,8 +71,8 @@
             <mat-icon>menu</mat-icon>
         </button>
         <span  class="app-message">
-            <span *ngIf="currentMessage">
-                <h1>{{currentMessage}}</h1>
+            <span *ngIf="currentMessage">                
+                <h1><div [innerHTML]="currentMessage"></div></h1>
             </span>
             <span *ngIf="isBusy">
                 <mat-spinner></mat-spinner>
