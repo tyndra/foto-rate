@@ -212,10 +212,9 @@ export class AppComponent implements OnInit, OnDestroy  {
   private setCurrentIndex(value: number){
     this.currentIndex = -1;
     this.currentMessage = "";
-    this.isBusy = true;
+    this.isBusy = false;
     var subsrciption = timer(1).subscribe(t=> {
       this.currentIndex = value;
-      this.isBusy = false;
       subsrciption.unsubscribe();
     });
   }
