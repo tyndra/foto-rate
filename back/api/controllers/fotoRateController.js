@@ -101,7 +101,6 @@ var get_foto_helper = function(res, path, resize) {
         resize = supportedExt.find(function(element) {
             return element === ext;
         });
-
     }
 
     console.log("get_foto_helper: " + path + (resize ? ", resize" : ''));
